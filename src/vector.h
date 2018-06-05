@@ -6,6 +6,7 @@
 #define LAB4_EXPANDABLE_VECTOR_H
 
 #include <stddef.h> /* for size t */
+
 typedef struct Vector Vector;
 
 /* Vector creation and destruction. */
@@ -20,11 +21,11 @@ int vector_push_back(Vector *v, const void *item);
 
 void vector_pop_back(Vector *v, void *item);
 
-void* vector_get_element(Vector *v, size_t index);
+void *vector_get_element(Vector *v, size_t index);
 
-void* vector_get_begin(Vector *v);
+void *vector_get_begin(Vector *v);
 
-void* vector_get_end(Vector *v);
+void *vector_get_end(Vector *v);
 
 /* Size operations. */
 size_t vector_get_item_size(const Vector *v);
