@@ -5,26 +5,36 @@
 #include <check.h>
 #include "vector_int.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 #define NELEMS(x) (sizeof (x)/sizeof (x[0]))
 
 int comp_vectors_int(const void *a, const void *b)
 /* Returns -ve if a<b, 0 if a==b, +ve if a>b */
 {
-    struct Vector *v1 = (struct Vector *) a;
-    struct Vector *v2 = (struct Vector *) b;
-    /** YOUR CODE HERE */
+    return *(int *) a == *(int *) b ? 0 : *(int *) a > *(int *) b ? 1 : -1;
 }
 
 START_TEST(test_vector_qsort)
     {
         struct Vector *v;
-        for (int i = 0; i < NELEMS(v); ++i) {
-            /** Initialisation */
+        v = vector_create_int(20);
+        int j = 55;
+        for (int i = 0; i < vector_get_capacity(v); ++i) {
+            vector_push_back_int(v, j--);
         }
-        qsort(&v, NELEMS(v), sizeof v[0], comp_vectors_int);
-        for (int i = 0; i < NELEMS(v); ++i) {
-            /** printf */
+        void *ptr = (int *) malloc(sizeof(int));
+        printf("Size before quicksort: %zu\n", vector_get_size(v));
+        for (int i = 0; i < vector_get_capacity(v); ++i) {
+            ptr = vector_get_element(v, (size_t) i);
+            printf("Elem %d: %d\n", i + 1, *(int *) ptr);
+
+        }
+        qsort(vector_get_begin(v), vector_get_capacity(v), vector_get_item_size(v), comp_vectors_int);
+        printf("Size after quicksort: %zu\n", vector_get_size(v));
+        for (int i = 0; i < vector_get_capacity(v); ++i) {
+            ptr = vector_get_element(v, (size_t) i);
+            printf("Elem %d: %d\n", i + 1, *(int *) ptr);
         }
     }
 END_TEST
