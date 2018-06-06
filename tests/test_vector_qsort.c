@@ -8,8 +8,6 @@
 #include <stdio.h>
 #include <time.h>
 
-#define NELEMS(x) (sizeof (x)/sizeof (x[0]))
-
 int comp_vectors_int(const void *a, const void *b)
 /* Returns -ve if a<b, 0 if a==b, +ve if a>b */
 {
@@ -20,14 +18,14 @@ START_TEST(test_vector_qsort)
     {
         struct Vector *v;
         int our_size = 20;
-        v = vector_create_int(our_size);
+        v = vector_create_int((size_t) our_size);
         int mod = 1000;
-        srand(time(NULL));
+        srand((unsigned int) time(NULL));
 
         for (int i = 0; i < vector_get_capacity(v); ++i) {
             vector_push_back_int(v, rand() % mod);
         }
-        void *ptr = (int *) malloc(sizeof(int));
+        void *ptr;
         printf("Size before quicksort: %zu\n", vector_get_size(v));
         for (int i = 0; i < vector_get_capacity(v); ++i) {
             ptr = vector_get_element(v, (size_t) i);
@@ -37,11 +35,12 @@ START_TEST(test_vector_qsort)
         printf("\n");
         qsort(vector_get_begin(v), vector_get_capacity(v), vector_get_item_size(v), comp_vectors_int);
         printf("Size after quicksort: %zu\n", vector_get_size(v));
-        void *prev = (int *) malloc(sizeof(int));
+        void *prev;
         prev = vector_get_element(v, 0);
         for (int i = 1; i < vector_get_capacity(v); ++i) {
             ptr = vector_get_element(v, (size_t) i);
             ck_assert(ptr >= prev);
+            prev = ptr;
             printf("%d ", *(int *) ptr);
         }
         printf("\n");
