@@ -11,24 +11,22 @@ START_TEST(test_vector_create)
     {
         size_t capacity = 50;
         struct Vector *v = vector_create(capacity, (size_t) sizeof(int));
-        printf("%d\n", (int) vector_get_capacity(v));
-        printf("%d\n", (int) vector_get_size(v));
-        printf("%d\n", (int) vector_get_item_size(v));
-        printf("%p\n", vector_get_begin(v));
-        printf("%p\n", vector_get_end(v));
+        ck_assert_int_eq(50, (int) vector_get_capacity(v));
+        ck_assert_int_eq(0, vector_get_size(v));
+        ck_assert_int_eq(4, vector_get_item_size(v));
+        ck_assert_int_eq((vector_get_end(v) - vector_get_begin(v)), 0);
         int b = 5;
         vector_push_back(v, &b);
-        printf("%d\n", (int) vector_get_size(v));
-        printf("%p\n", vector_get_end(v));
+        ck_assert_int_eq((vector_get_end(v) - vector_get_begin(v)), 4);
+        ck_assert_int_eq(1, vector_get_size(v));
         void *a = malloc(sizeof(int));
         vector_pop_back(v, a);
 
-        printf("%d\n", *((int *) a));
-        printf("%p\n", vector_get_end(v));
+        ck_assert_int_eq(5, *((int *) a));
         b = 10;
         vector_push_back(v, &b);
         a = vector_get_element(v, 0);
-        printf("%d\n", *((int *) a));
+        ck_assert_int_eq(10, *((int *) a));
     }
 END_TEST
 
